@@ -14,3 +14,13 @@ export async function findPhoneById(phoneId: number) {
   );
   return result.rows[0];
 }
+
+export async function findRechargesByPhoneId(phoneId: number) {
+  const result = await connection.query(
+    `SELECT * FROM recharges 
+     WHERE phone_id = $1 
+     ORDER BY created_at DESC`,
+    [phoneId]
+  );
+  return result.rows;
+}
