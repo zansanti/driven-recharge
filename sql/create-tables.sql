@@ -4,7 +4,6 @@ CREATE TABLE phones (
   phone_number VARCHAR(11) NOT NULL UNIQUE,
   carrier_id INTEGER NOT NULL REFERENCES carriers(id),
   name VARCHAR(255) NOT NULL,
-  description TEXT NOT NULL,
   document VARCHAR(11) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );

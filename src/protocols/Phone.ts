@@ -3,6 +3,5 @@ export interface Phone {
   phoneNumber: string;
   carrierId: number;
   name: string;
-  description: string;
   document: string;
 }

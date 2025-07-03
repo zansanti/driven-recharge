@@ -16,3 +16,6 @@ export async function createPhone(phone: Phone) {
 
   await phoneRepository.insertPhone(phone);
 }
+export async function getPhonesByDocument(document: string) {
+  return await phoneRepository.findPhonesByDocument(document);
+}
