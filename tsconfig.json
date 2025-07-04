@@ -4,5 +4,12 @@
     "target": "ES2020",
     "outDir": "./dist",
     "esModuleInterop": true
-  }
+  },
+  "include": [
+    "src/**/*",
+    "src/**/*.sql" // inclui arquivos SQL
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
