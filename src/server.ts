@@ -7,40 +7,35 @@ const PORT = process.env.PORT || 5000;
 
 async function runSqlScripts() {
   try {
-    // 1. Executa carriers.sql (com tratamento para tabela existente)
-    const carriersPath = path.join(__dirname, 'sql/create-tables.sql');
-    const carriersSql = fs.readFileSync(carriersPath, 'utf-8');
+    // 1. Criação da tabela carriers (se não existir)
     await connection.query(`
-      DO $$
-      BEGIN
-        ${carriersSql}
-      EXCEPTION WHEN duplicate_table THEN
-        RAISE NOTICE 'Tabela carriers já existe, pulando criação.';
-      END
-      $$;
+      CREATE TABLE IF NOT EXISTS carriers (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL
+      );
     `);
 
-    // 2. Executa phones.sql (com tratamento para tabela existente)
-    const phonesPath = path.join(__dirname, 'sql/seed-carriers.sql');
-    const phonesSql = fs.readFileSync(phonesPath, 'utf-8');
+    // 2. Criação da tabela phones (se não existir)
     await connection.query(`
-      DO $$
-      BEGIN
-        ${phonesSql}
-      EXCEPTION WHEN duplicate_table THEN
-        RAISE NOTICE 'Tabela phones já existe, pulando criação.';
-      END
-      $$;
+      CREATE TABLE IF NOT EXISTS phones (
+        id SERIAL PRIMARY KEY,
+        phone_number VARCHAR(11) NOT NULL UNIQUE,
+        carrier_id INTEGER NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        document VARCHAR(11) NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        CONSTRAINT fk_carrier FOREIGN KEY(carrier_id) REFERENCES carriers(id)
+      );
     `);
 
-    console.log('✅ Scripts SQL executados com segurança');
+    console.log('✅ Tabelas criadas/verificadas com sucesso');
   } catch (err) {
-    console.error('❌ Erro crítico ao executar scripts SQL:', err);
+    console.error('❌ Erro crítico ao executar scripts SQL:', err.message);
     throw err;
   }
 }
 
-// Fluxo de inicialização (mantido igual)
+// Fluxo de inicialização
 connection.query('SELECT NOW()')
   .then(() => {
     console.log('✅ PostgreSQL connected');
@@ -52,6 +47,6 @@ connection.query('SELECT NOW()')
     });
   })
   .catch((err) => {
-    console.error('❌ Initialization failed:', err.message); // Mostra apenas a mensagem principal
+    console.error('❌ Initialization failed:', err.message);
     process.exit(1);
   });
