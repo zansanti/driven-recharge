@@ -4,7 +4,7 @@ import { Phone } from '../protocols/Phone';
 export async function insertPhone(phone: Phone) {
   await connection.query(
     `INSERT INTO phones (phone_number, carrier_id, name, document) 
-     VALUES ($1, $2, $3, $4, $5)`,
+     VALUES ($1, $2, $3, $4)`,
     [phone.phoneNumber, phone.carrierId, phone.name, phone.document]
   );
 }
