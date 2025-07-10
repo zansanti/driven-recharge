@@ -19,7 +19,7 @@ export async function findRechargesByPhoneId(phoneId: number) {
   const result = await connection.query(
     `SELECT * FROM recharges 
      WHERE phone_id = $1 
-     ORDER BY created_at DESC`,
+     ORDER BY id DESC`,
     [phoneId]
   );
   return result.rows;
