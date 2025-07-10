@@ -7,7 +7,7 @@ export async function getSummaryByDocument(document: string) {
        carriers.name AS carrier_name,
        json_agg(
          json_build_object(
-           'amount', recharges.amount,
+           'amount', recharges.amount
          ) ORDER BY recharges.id DESC
        ) AS recharges
      FROM phones
