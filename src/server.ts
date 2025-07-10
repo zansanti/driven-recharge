@@ -23,7 +23,6 @@ async function runSqlScripts() {
         carrier_id INTEGER NOT NULL,
         name VARCHAR(255) NOT NULL,
         document VARCHAR(11) NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW(),
         CONSTRAINT fk_carrier FOREIGN KEY(carrier_id) REFERENCES carriers(id)
       );
     `);

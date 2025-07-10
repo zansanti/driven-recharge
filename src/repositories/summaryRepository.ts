@@ -8,8 +8,7 @@ export async function getSummaryByDocument(document: string) {
        json_agg(
          json_build_object(
            'amount', recharges.amount,
-           'created_at', recharges.created_at
-         ) ORDER BY recharges.created_at DESC
+         ) ORDER BY recharges.id DESC
        ) AS recharges
      FROM phones
      LEFT JOIN carriers ON phones.carrier_id = carriers.id
