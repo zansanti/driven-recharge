@@ -1,10 +1,26 @@
 import { connection } from '../config/database';
+import { PhoneDB } from '../protocols/Database'; 
 
-export async function getSummaryByDocument(document: string) {
-  const result = await connection.query(
+// Tipo para o objeto de recarga no JSON agregado
+interface RechargeSummary {
+  amount: number;
+}
+
+// Tipo do retorno completo
+interface SummaryResult extends PhoneDB {
+  carrier_name: string;
+  recharges: RechargeSummary[];
+}
+
+export async function getSummaryByDocument(document: string): Promise<SummaryResult[]> {
+  const result = await connection.query<SummaryResult>(
     `SELECT 
-       phones.*,
-       carriers.name AS carrier_name,
+       phones.id,
+       phones.phone_number as "phoneNumber",
+       phones.carrier_id as "carrierId",
+       phones.name,
+       phones.document,
+       carriers.name as "carrierName",
        json_agg(
          json_build_object(
            'amount', recharges.amount
